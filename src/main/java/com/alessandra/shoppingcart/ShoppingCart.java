@@ -1,30 +1,27 @@
 package com.alessandra.shoppingcart;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import com.alessandra.shoppingcart.service.PriceCalculatorService;
-import com.google.common.collect.ImmutableList;
+public class ShoppingCart {
+    private final List<Fruit> fruitList;
 
-@SpringBootApplication
-public class ShoppingCart implements CommandLineRunner {
-
-    @Autowired
-    private PriceCalculatorService priceCalculatorService;
-
-    public static void main(String[] args) {
-        SpringApplication.run(ShoppingCart.class, args);
+    public ShoppingCart(List<Fruit> fruitList) {
+        this.fruitList = fruitList;
     }
 
-    @Override
-    public void run(String... args) {
-        Apple apple = new Apple();
-        Orange orange = new Orange();
-        List<Fruit> fruitList = ImmutableList.of(apple, orange);
-        System.out.println("total price: " + priceCalculatorService.calculateTotalCost(fruitList));
+    public List<Apple> getApples() {
+        return fruitList.stream()
+                .filter(fruit -> fruit.getName().equals("apple"))
+                .map(fruit -> (Apple) fruit)
+                .collect(Collectors.toList());
+    }
+
+    public List<Orange> getOranges() {
+        return fruitList.stream()
+                .filter(fruit -> fruit.getName().equals("orange"))
+                .map(fruit -> (Orange) fruit)
+                .collect(Collectors.toList());
     }
 
 }
